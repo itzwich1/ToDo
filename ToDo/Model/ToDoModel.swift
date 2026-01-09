@@ -9,10 +9,37 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-enum Priority: Int, Codable{
+enum Priority: Int, Codable, CaseIterable, Identifiable{
     case high = 1
     case medium = 2
     case low = 3
+    
+    
+    // Für Identifiable (Pflicht)
+    var id: Int { rawValue }
+    
+    // WICHTIG: Die Text-Darstellung für den Nutzer
+    var title: String {
+        switch self {
+        case .high: return "Hoch"
+        case .medium: return "Mittel"
+        case .low: return "Niedrig"
+        }
+    }
+    
+    // WICHTIG: Die Farbe für die UI (z.B. der kleine Punkt in der Liste)
+    var color: Color {
+        switch self {
+        case .high: return .red
+        case .medium: return .orange
+        case .low: return .green
+        }
+    }
+    
+    static func < (lhs: Priority, rhs: Priority) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
 }
 
 @Model

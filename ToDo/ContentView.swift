@@ -13,49 +13,54 @@ struct ContentView: View {
     @Query private var items: [ToDoModel]
     
     @State private var selectedItem: ToDoModel?
-
+    
+    @State private var showAddSheet: Bool = false
+    
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedItem) {
                 ForEach(items) { item in
-                    NavigationLink{
+                    NavigationLink(value: item){
                         Text("Item at \(item.title)")
                         
                         EditToDoView(toDo: item)
                         
-                    } label: {
-                        Text(item.title)
                     }
                 }
                 .onDelete(perform: deleteItems)
             }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
             .toolbar {
-#if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-#endif
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: {showAddSheet = true}) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
+            }.sheet(isPresented: $showAddSheet){
+                let newItem = ToDoModel(timestamp: Date(), priority: .medium)
+                EditToDoView(toDo: newItem).presentationDetents([.large])
             }
         } detail: {
-            Text("Select an item")
+            
+            if let item = selectedItem {
+                // Wenn ein Item angeklickt wurde -> Bearbeiten-Ansicht
+                EditToDoView(toDo: item)
+            } else {
+                Text("Wähle eine Aufgabe aus")
+                    .foregroundStyle(.secondary)
+            }
         }
     }
-
+    
     private func addItem() {
         withAnimation {
             let newItem = ToDoModel(timestamp: Date(), title: "Test", priority: .medium)
             modelContext.insert(newItem)
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
