@@ -14,7 +14,9 @@ struct ContentView: View {
     
     @State private var selectedItem: ToDoModel?
     
+    
     @State private var showAddSheet: Bool = false
+    
     
     var body: some View {
         NavigationSplitView {
@@ -34,13 +36,14 @@ struct ContentView: View {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: {showAddSheet = true}) {
+                    Button(action: { showAddSheet = true }) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
             }.sheet(isPresented: $showAddSheet){
-                let newItem = ToDoModel(timestamp: Date(), priority: .medium)
-                EditToDoView(toDo: newItem).presentationDetents([.large])
+                
+                AddToDoView()
+                    .presentationDetents([.large])
             }
         } detail: {
             
@@ -51,13 +54,6 @@ struct ContentView: View {
                 Text("Wähle eine Aufgabe aus")
                     .foregroundStyle(.secondary)
             }
-        }
-    }
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = ToDoModel(timestamp: Date(), title: "Test", priority: .medium)
-            modelContext.insert(newItem)
         }
     }
     
