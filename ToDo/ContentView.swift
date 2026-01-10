@@ -23,9 +23,9 @@ struct ContentView: View {
             List(selection: $selectedItem) {
                 ForEach(items) { item in
                     NavigationLink(value: item){
-                        Text("Item at \(item.title)")
+                        Text("\(item.title)")
                         
-                        EditToDoView(toDo: item)
+                        //EditToDoView(toDo: item)
                         
                     }
                 }

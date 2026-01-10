@@ -78,6 +78,7 @@ struct AddToDoView: View {
             priority: priority
         )
         
+        print(newItem.priority.title)
         // 2. In die Datenbank werfen
         modelContext.insert(newItem)
         
