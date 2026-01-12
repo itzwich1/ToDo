@@ -51,15 +51,20 @@ final class ToDoModel {
     var priority: Priority
     
     //Optional noch nicht sicher
-    //var dueDate: Date
+    var dueDate: Date
+    var hasDueDate: Bool
+    var hasAnyTime: Bool
     //var category: String //ggf. auch als Enum (3-5 Kategorien vorgeben)
     
     
-    init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority) {
+    init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false) {
         self.timestamp = timestamp
         self.title = title
         self.isCompleted = isCompleted
         self.notes = notes
         self.priority = priority
+        self.dueDate = dueDate
+        self.hasDueDate = hasDueDate
+        self.hasAnyTime = hasAnyTime
     }
 }

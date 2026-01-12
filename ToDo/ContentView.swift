@@ -24,8 +24,15 @@ struct ContentView: View {
                 ForEach(items) { item in
                     NavigationLink(value: item){
                         Text("\(item.title)")
+
                         
-                        //EditToDoView(toDo: item)
+                        if item.priority == .high{
+                            Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.red)
+                        }
+                        
+                        if item.isCompleted {
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                        }
                         
                     }
                 }

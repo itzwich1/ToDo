@@ -17,6 +17,10 @@ struct AddToDoView: View {
     @State private var priority: Priority = .medium
     @State private var isCompleted: Bool = false
     @State private var notes: String = ""
+    @State private var dueDate: Date = Date()
+    @State private var hasDueDate: Bool = false
+    
+    @State private var toDo = ToDoModel(timestamp: Date())
     
     var body: some View {
         NavigationStack {
@@ -24,6 +28,45 @@ struct AddToDoView: View {
                 Section("Neue Aufgabe") {
                     TextField("Titel", text: $title)
                     Toggle("Erledigt", isOn: $isCompleted)
+                }
+                
+                Section("Datum & Uhrzeit"){
+                    
+                    HStack{
+                        // Linke Seite: Icon und Text
+                        Image(systemName: "calendar")
+                            .foregroundStyle(.red)
+                        Text("Datum")
+                        
+                        Spacer()
+                        
+                        if toDo.hasDueDate {
+                            DatePicker("", selection: $toDo.dueDate, displayedComponents: [.date])
+                                .labelsHidden()
+                                .datePickerStyle(.compact)
+                        }
+                        
+                        Toggle("", isOn: $toDo.hasDueDate)
+                            .labelsHidden()
+                    }
+                    
+                    HStack{
+                        // Linke Seite: Icon und Text
+                        Image(systemName: "clock")
+                            .foregroundStyle(.red)
+                        Text("Uhrzeit")
+                        
+                        Spacer()
+                        
+                        if toDo.hasAnyTime {
+                            DatePicker("", selection: $toDo.dueDate, displayedComponents: [.hourAndMinute])
+                                .labelsHidden()
+                                .datePickerStyle(.compact)
+                        }
+                        
+                        Toggle("", isOn: $toDo.hasAnyTime)
+                            .labelsHidden()
+                    }
                 }
                 
                 Section("Wichtigkeit") {
@@ -75,7 +118,9 @@ struct AddToDoView: View {
             title: title,
             isCompleted: isCompleted,
             notes: notes,
-            priority: priority
+            priority: priority,
+            dueDate: dueDate,
+            hasDueDate: hasDueDate
         )
         
         print(newItem.priority.title)

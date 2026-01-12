@@ -22,7 +22,16 @@ struct EditToDoView: View {
             Section("Aufgabe"){
                 TextField("Title eingeben", text: $toDo.title)
                 
+                
+                
                 Toggle("Erledigt", isOn: $toDo.isCompleted)
+            }
+            
+            Section("Datum & Uhrzeit"){
+                
+                HStack{
+                    Image(systemName: "calendar").foregroundStyle(.red)
+                }
             }
             
             // Prioritaet
