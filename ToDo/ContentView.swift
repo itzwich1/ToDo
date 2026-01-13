@@ -30,10 +30,6 @@ struct ContentView: View {
                             Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.red)
                         }
                         
-                        if item.isCompleted {
-                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        }
-                        
                     }.swipeActions(edge: .leading){
                         
                         Button(role: .destructive, action: {
