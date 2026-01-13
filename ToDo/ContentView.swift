@@ -21,39 +21,91 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedItem) {
-                ForEach(items) { item in
-                    NavigationLink(value: item){
-                        Text("\(item.title)")
-                        
-                        
-                        if item.priority == .high{
-                            Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.red)
-                        }
-                        
-                    }.swipeActions(edge: .leading){
-                        
-                        Button(role: .destructive, action: {
-                            modelContext.delete(item)
-                        }) {
-                            Image(systemName: "trash")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                                .frame(width: 40, height: 40) // Feste Größe erzwingen
-                                .background(.green)
-                                .clipShape(Circle())
-                        }
-                        
-                        if !item.isCompleted {
-                            Button(role: .confirm, action: {
-                                item.isCompleted = true
+                
+                Section("Offene Aufgaben") {
+                    ForEach(items.filter{!$0.isCompleted}){ item in
+                        NavigationLink(value: item){
+                            HStack {
+                                Text(item.title)
+                                
+                                Spacer()
+                                
+                                // Dein Wichtigkeits-Icon
+                                if item.priority == .high {
+                                    Image(systemName: "exclamationmark.circle.fill")
+                                        .foregroundStyle(.red)
+                                }
+                                
+                                // Info, falls Termin heute ist (Optional, sieht aber gut aus)
+                                if item.hasDueDate {
+                                    Text(item.dueDate.formatted(date: .numeric, time: .omitted))
+                                        .font(.caption2)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }.swipeActions(edge: .leading){
+                            
+                            Button(role: .destructive, action: {
+                                modelContext.delete(item)
                             }) {
-                                Image(systemName: "checkmark")
+                                Image(systemName: "trash")
                                     .font(.headline)
                                     .foregroundStyle(.white)
                                     .frame(width: 40, height: 40) // Feste Größe erzwingen
                                     .background(.green)
                                     .clipShape(Circle())
-                            }.tint(.green)
+                            }
+                            
+                            if !item.isCompleted {
+                                Button(role: .confirm, action: {
+                                    item.isCompleted = true
+                                }) {
+                                    Image(systemName: "checkmark")
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                        .frame(width: 40, height: 40) // Feste Größe erzwingen
+                                        .background(.green)
+                                        .clipShape(Circle())
+                                }.tint(.green)
+                            }
+                        }
+                    }
+                }
+                
+                if !items.filter({$0.isCompleted}).isEmpty{
+                    Section("Erledigt"){
+                        ForEach(items.filter{$0.isCompleted}) { item in
+                            NavigationLink(value: item) {
+                                HStack {
+                                    Text(item.title)
+                                        .strikethrough()               // Durchstreichen
+                                        .foregroundStyle(.secondary)   // Ausgrauen
+                                }
+                            }.swipeActions(edge: .leading){
+                                
+                                Button(role: .destructive, action: {
+                                    modelContext.delete(item)
+                                }) {
+                                    Image(systemName: "trash")
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                        .frame(width: 40, height: 40) // Feste Größe erzwingen
+                                        .background(.green)
+                                        .clipShape(Circle())
+                                }
+                                
+                                Button(role: .confirm, action: {
+                                    item.isCompleted = false
+                                }) {
+                                    Image(systemName: "arrow.uturn.backward")
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                        .frame(width: 40, height: 40) // Feste Größe erzwingen
+                                        .background(.green)
+                                        .clipShape(Circle())
+                                }.tint(.blue)
+                            }
+                            
                         }
                     }
                 }
