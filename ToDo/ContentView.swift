@@ -38,7 +38,7 @@ struct ContentView: View {
                                 
                                 // Info, falls Termin heute ist (Optional, sieht aber gut aus)
                                 if item.hasDueDate {
-                                    Text(item.dueDate.formatted(date: .numeric, time: .omitted))
+                                    Text("Fällig bis \(item.dueDate.formatted(date: .numeric, time: .omitted))")
                                         .font(.caption2)
                                         .foregroundStyle(.secondary)
                                 }
@@ -109,21 +109,37 @@ struct ContentView: View {
                         }
                     }
                 }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: { showAddSheet = true }) {
-                        Label("Add Item", systemImage: "plus")
+            }.navigationTitle("ToDo's")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
                     }
+                    ToolbarItem {
+                        Button(action: { showAddSheet = true }) {
+                            Label("Add Item", systemImage: "plus")
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarLeading) { // .topBarLeading bei neuerem iOS
+                        Menu {
+                            /*Picker("Filter") {
+                                ForEach(FilterOption.allCases) { filter in
+                                    // Zeigt Haken beim ausgewählten Element an
+                                    Label(filter.rawValue, systemImage: iconForFilter(filter))
+                                        .tag(filter)
+                                }
+                            }*/
+                        } label: {
+                            // Das Icon in der Toolbar (Ein Filter-Trichter im Kreis)
+                            Image(systemName: "line.3.horizontal.decrease")
+                        }
+                    }
+                    
+                }.sheet(isPresented: $showAddSheet){
+                    
+                    AddToDoView()
+                        .presentationDetents([.large])
                 }
-            }.sheet(isPresented: $showAddSheet){
-                
-                AddToDoView()
-                    .presentationDetents([.large])
-            }
         } detail: {
             
             if let item = selectedItem {
