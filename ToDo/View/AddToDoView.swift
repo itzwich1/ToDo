@@ -12,22 +12,15 @@ struct AddToDoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    // Lokale Variablen (Temp-Speicher)
-    @State private var title: String = ""
-    @State private var priority: Priority = .medium
-    @State private var isCompleted: Bool = false
-    @State private var notes: String = ""
-    @State private var dueDate: Date = Date()
-    @State private var hasDueDate: Bool = false
-    
-    @State private var toDo = ToDoModel(timestamp: Date())
+    @State private var newToDo = ToDoModel(timestamp: Date())
     
     var body: some View {
+        
         NavigationStack {
             Form {
                 Section("Neue Aufgabe") {
-                    TextField("Titel", text: $title)
-                    Toggle("Erledigt", isOn: $isCompleted)
+                    TextField("Titel", text: $newToDo.title)
+                    Toggle("Erledigt", isOn: $newToDo.isCompleted)
                 }
                 
                 Section("Datum & Uhrzeit"){
@@ -35,42 +28,40 @@ struct AddToDoView: View {
                     HStack{
                         // Linke Seite: Icon und Text
                         Image(systemName: "calendar")
-                            .foregroundStyle(.red)
                         Text("Datum")
                         
                         Spacer()
                         
-                        if toDo.hasDueDate {
-                            DatePicker("", selection: $toDo.dueDate, displayedComponents: [.date])
+                        if newToDo.hasDueDate {
+                            DatePicker("", selection: $newToDo.dueDate, displayedComponents: [.date])
                                 .labelsHidden()
                                 .datePickerStyle(.compact)
                         }
                         
-                        Toggle("", isOn: $toDo.hasDueDate)
+                        Toggle("", isOn: $newToDo.hasDueDate)
                             .labelsHidden()
                     }
                     
                     HStack{
                         // Linke Seite: Icon und Text
                         Image(systemName: "clock")
-                            .foregroundStyle(.red)
                         Text("Uhrzeit")
                         
                         Spacer()
                         
-                        if toDo.hasAnyTime {
-                            DatePicker("", selection: $toDo.dueDate, displayedComponents: [.hourAndMinute])
+                        if newToDo.hasAnyTime {
+                            DatePicker("", selection: $newToDo.dueDate, displayedComponents: [.hourAndMinute])
                                 .labelsHidden()
                                 .datePickerStyle(.compact)
                         }
                         
-                        Toggle("", isOn: $toDo.hasAnyTime)
+                        Toggle("", isOn: $newToDo.hasAnyTime)
                             .labelsHidden()
                     }
                 }
                 
                 Section("Wichtigkeit") {
-                    Picker("Priorität", selection: $priority) {
+                    Picker("Priorität", selection: $newToDo.priority) {
                         ForEach(Priority.allCases) { priority in
                             HStack {
                                 Text(priority.title)
@@ -83,9 +74,9 @@ struct AddToDoView: View {
                 }
                 
                 Section("Notizen") {
-                    TextEditor(text: $notes)
+                    TextEditor(text: $newToDo.notes)
                         .frame(minHeight: 100)
-                    if notes.isEmpty {
+                    if newToDo.notes.isEmpty {
                         Text("Notizen hinzufügen...").foregroundStyle(.secondary)
                     }
                 }
@@ -105,7 +96,7 @@ struct AddToDoView: View {
                     Button("Speichern") {
                         saveItem()
                     }
-                    .disabled(title.isEmpty) // Schutz gegen leere Aufgaben
+                    .disabled(newToDo.title.isEmpty) // Schutz gegen leere Aufgaben
                 }
             }
         }
@@ -113,7 +104,7 @@ struct AddToDoView: View {
     
     private func saveItem() {
         // 1. Objekt aus den lokalen Variablen bauen
-        let newItem = ToDoModel(
+        /*let newItem = ToDoModel(
             timestamp: Date(),
             title: title,
             isCompleted: isCompleted,
@@ -121,11 +112,11 @@ struct AddToDoView: View {
             priority: priority,
             dueDate: dueDate,
             hasDueDate: hasDueDate
-        )
+        )*/
         
-        print(newItem.priority.title)
+        print(newToDo.priority.title)
         // 2. In die Datenbank werfen
-        modelContext.insert(newItem)
+        modelContext.insert(newToDo)
         
         // 3. Fenster zu
         dismiss()

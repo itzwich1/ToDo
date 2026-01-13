@@ -10,9 +10,10 @@ import SwiftData
 import SwiftUI
 
 enum Priority: Int, Codable, CaseIterable, Identifiable{
-    case high = 1
+    
+    case low = 1
     case medium = 2
-    case low = 3
+    case high = 3
     
     
     // Für Identifiable (Pflicht)
@@ -30,9 +31,10 @@ enum Priority: Int, Codable, CaseIterable, Identifiable{
     // WICHTIG: Die Farbe für die UI (z.B. der kleine Punkt in der Liste)
     var color: Color {
         switch self {
-        case .high: return .red
-        case .medium: return .orange
         case .low: return .green
+        case .medium: return .orange
+        case .high: return .red
+        
         }
     }
     

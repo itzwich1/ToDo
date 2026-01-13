@@ -30,7 +30,37 @@ struct EditToDoView: View {
             Section("Datum & Uhrzeit"){
                 
                 HStack{
-                    Image(systemName: "calendar").foregroundStyle(.red)
+                    // Linke Seite: Icon und Text
+                    Image(systemName: "calendar")
+                    Text("Datum")
+                    
+                    Spacer()
+                    
+                    if toDo.hasDueDate {
+                        DatePicker("", selection: $toDo.dueDate, displayedComponents: [.date])
+                            .labelsHidden()
+                            .datePickerStyle(.compact)
+                    }
+                    
+                    Toggle("", isOn: $toDo.hasDueDate)
+                        .labelsHidden()
+                }
+                
+                HStack{
+                    // Linke Seite: Icon und Text
+                    Image(systemName: "clock")
+                    Text("Uhrzeit")
+                    
+                    Spacer()
+                    
+                    if toDo.hasAnyTime {
+                        DatePicker("", selection: $toDo.dueDate, displayedComponents: [.hourAndMinute])
+                            .labelsHidden()
+                            .datePickerStyle(.compact)
+                    }
+                    
+                    Toggle("", isOn: $toDo.hasAnyTime)
+                        .labelsHidden()
                 }
             }
             

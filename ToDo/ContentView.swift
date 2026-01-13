@@ -24,7 +24,7 @@ struct ContentView: View {
                 ForEach(items) { item in
                     NavigationLink(value: item){
                         Text("\(item.title)")
-
+                        
                         
                         if item.priority == .high{
                             Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.red)
@@ -34,9 +34,33 @@ struct ContentView: View {
                             Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                         }
                         
+                    }.swipeActions(edge: .leading){
+                        
+                        Button(role: .destructive, action: {
+                            modelContext.delete(item)
+                        }) {
+                            Image(systemName: "trash")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .frame(width: 40, height: 40) // Feste Größe erzwingen
+                                .background(.green)
+                                .clipShape(Circle())
+                        }
+                        
+                        if !item.isCompleted {
+                            Button(role: .confirm, action: {
+                                item.isCompleted = true
+                            }) {
+                                Image(systemName: "checkmark")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                                    .frame(width: 40, height: 40) // Feste Größe erzwingen
+                                    .background(.green)
+                                    .clipShape(Circle())
+                            }.tint(.green)
+                        }
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
