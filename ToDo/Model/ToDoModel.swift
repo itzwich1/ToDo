@@ -58,8 +58,11 @@ final class ToDoModel {
     var hasAnyTime: Bool
     //var category: String //ggf. auch als Enum (3-5 Kategorien vorgeben)
     
+    @Attribute(.externalStorage) var attachment: Data?
+        var attachmentName: String?
     
-    init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false) {
+    
+    init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false, attachment: Data? = nil, attachmentName: String? = nil) {
         self.timestamp = timestamp
         self.title = title
         self.isCompleted = isCompleted
@@ -68,5 +71,7 @@ final class ToDoModel {
         self.dueDate = dueDate
         self.hasDueDate = hasDueDate
         self.hasAnyTime = hasAnyTime
+        self.attachment = attachment
+        self.attachmentName = attachmentName
     }
 }
