@@ -27,42 +27,7 @@ struct EditToDoView: View {
                 Toggle("Erledigt", isOn: $toDo.isCompleted)
             }
             
-            Section("Datum & Uhrzeit"){
-                
-                HStack{
-                    // Linke Seite: Icon und Text
-                    Image(systemName: "calendar")
-                    Text("Datum")
-                    
-                    Spacer()
-                    
-                    if toDo.hasDueDate {
-                        DatePicker("", selection: $toDo.dueDate, displayedComponents: [.date])
-                            .labelsHidden()
-                            .datePickerStyle(.compact)
-                    }
-                    
-                    Toggle("", isOn: $toDo.hasDueDate)
-                        .labelsHidden()
-                }
-                
-                HStack{
-                    // Linke Seite: Icon und Text
-                    Image(systemName: "clock")
-                    Text("Uhrzeit")
-                    
-                    Spacer()
-                    
-                    if toDo.hasAnyTime {
-                        DatePicker("", selection: $toDo.dueDate, displayedComponents: [.hourAndMinute])
-                            .labelsHidden()
-                            .datePickerStyle(.compact)
-                    }
-                    
-                    Toggle("", isOn: $toDo.hasAnyTime)
-                        .labelsHidden()
-                }
-            }
+            DateAndTimeElement(toDo: toDo, sectionHeadline: "Datum & Uhrzeit")
             
             // Prioritaet
             Section("Wichtigkeit"){
@@ -78,13 +43,15 @@ struct EditToDoView: View {
             }
             
             
-            Section("Details"){
+            Section("Notizen"){
                 TextEditor(text: $toDo.notes).frame(minWidth: 120)
                 
                 if toDo.notes.isEmpty {
                     Text("Hier kannst du Notizen hinzufügen...").foregroundStyle(.secondary).font(.caption)
                 }
             }
+            
+            AttachmentElement(todo: toDo)
             
             Section{
                 HStack {

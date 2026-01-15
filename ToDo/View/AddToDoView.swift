@@ -26,42 +26,7 @@ struct AddToDoView: View {
                     Toggle("Erledigt", isOn: $newToDo.isCompleted)
                 }
                 
-                Section("Datum & Uhrzeit"){
-                    
-                    HStack{
-                        // Linke Seite: Icon und Text
-                        Image(systemName: "calendar")
-                        Text("Datum")
-                        
-                        Spacer()
-                        
-                        if newToDo.hasDueDate {
-                            DatePicker("", selection: $newToDo.dueDate, displayedComponents: [.date])
-                                .labelsHidden()
-                                .datePickerStyle(.compact)
-                        }
-                        
-                        Toggle("", isOn: $newToDo.hasDueDate)
-                            .labelsHidden()
-                    }
-                    
-                    HStack{
-                        // Linke Seite: Icon und Text
-                        Image(systemName: "clock")
-                        Text("Uhrzeit")
-                        
-                        Spacer()
-                        
-                        if newToDo.hasAnyTime {
-                            DatePicker("", selection: $newToDo.dueDate, displayedComponents: [.hourAndMinute])
-                                .labelsHidden()
-                                .datePickerStyle(.compact)
-                        }
-                        
-                        Toggle("", isOn: $newToDo.hasAnyTime)
-                            .labelsHidden()
-                    }
-                }
+                DateAndTimeElement(toDo: newToDo,sectionHeadline: "Datum & Uhrzeit")
                 
                 Section("Wichtigkeit") {
                     Picker("Priorität", selection: $newToDo.priority) {
@@ -86,63 +51,7 @@ struct AddToDoView: View {
                 
                 
                 ///
-                Section("Anhang") {
-                    // Wenn schon eine Datei da ist, zeigen wir den Namen und einen Löschen-Button
-                    if let name = newToDo.attachmentName {
-                        HStack {
-                            Image(systemName: "doc.fill")
-                                .foregroundStyle(.blue)
-                            Text(name)
-                                .lineLimit(1)
-                                .truncationMode(.middle)
-                            
-                            Spacer()
-                            
-                            // Button zum Entfernen des Anhangs
-                            Button(role: .destructive) {
-                                withAnimation {
-                                    newToDo.attachment = nil
-                                    newToDo.attachmentName = nil
-                                }
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundStyle(.gray)
-                            }
-                        }
-                    } else {
-                        // Wenn noch keine Datei da ist -> Button zum Hinzufügen
-                        Button(action: { showFileImporter = true }) {
-                            Label("Datei hinzufügen", systemImage: "paperclip")
-                        }
-                    }
-                }.fileImporter(
-                    isPresented: $showFileImporter,
-                    allowedContentTypes: [.item], // .item erlaubt ALLES (Bilder, PDFs, Text...)
-                    allowsMultipleSelection: false
-                ) { result in
-                    switch result {
-                    case .success(let urls):
-                        if let url = urls.first {
-                            // WICHTIG: Sicherheitshalber Zugriff anfordern (Sandboxing)
-                            if url.startAccessingSecurityScopedResource() {
-                                defer { url.stopAccessingSecurityScopedResource() }
-                                
-                                do {
-                                    // 1. Die Datei in Daten (Bytes) umwandeln
-                                    let fileData = try Data(contentsOf: url)
-                                    
-                                    // 2. Ins Model speichern
-                                    newToDo.attachment = fileData
-                                    newToDo.attachmentName = url.lastPathComponent // z.B. "Foto.jpg"
-                                } catch {
-                                    print("Fehler beim Laden der Datei: \(error.localizedDescription)")
-                                }
-                            }
-                        }
-                    case .failure(let error):
-                        print("Abbruch oder Fehler: \(error.localizedDescription)")
-                    }
-                }
+                AttachmentElement(todo: newToDo)
                 
                 ///
                 
