@@ -21,10 +21,19 @@ struct EditToDoView: View {
             // Titel und Status
             Section("Aufgabe"){
                 TextField("Title eingeben", text: $toDo.title)
-                
-                
-                
                 Toggle("Erledigt", isOn: $toDo.isCompleted)
+                
+                Picker("Wähle eine Kategorie", selection: $toDo.category) {
+                    // Option "Keine" (falls dein category optional ist)
+                    Text("Keine").tag(nil as Category?)
+                    
+                    // Deine Kategorien aus dem Enum
+                    ForEach(Category.allCases) { category in
+                        Text(category.title).tag(category as Category?)
+                    }
+                }
+                .pickerStyle(.menu)
+                
             }
             
             DateAndTimeElement(toDo: toDo, sectionHeadline: "Datum & Uhrzeit")
