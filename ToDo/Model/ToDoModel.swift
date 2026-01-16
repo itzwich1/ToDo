@@ -9,7 +9,30 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-enum Priority: Int, Codable, CaseIterable, Identifiable{
+
+
+enum Category: Int, Codable, CaseIterable, Identifiable{
+    
+    case privat = 1
+    case haushalt = 2
+    case schule = 3
+    case arbeit = 4
+    
+    var id: Int { rawValue }
+    
+    
+    var title: String {
+        switch self {
+        case .privat: return "Privat"
+        case .haushalt: return "Haushalt"
+        case .schule: return "Schule"
+        case .arbeit: return "Arbeit"
+        }
+    }
+    
+}
+
+enum Priority: Int, Codable, CaseIterable, Identifiable, Comparable{
     
     case low = 1
     case medium = 2
@@ -34,7 +57,7 @@ enum Priority: Int, Codable, CaseIterable, Identifiable{
         case .low: return .green
         case .medium: return .orange
         case .high: return .red
-        
+            
         }
     }
     
@@ -59,7 +82,7 @@ final class ToDoModel {
     //var category: String //ggf. auch als Enum (3-5 Kategorien vorgeben)
     
     @Attribute(.externalStorage) var attachment: Data?
-        var attachmentName: String?
+    var attachmentName: String?
     
     
     init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false, attachment: Data? = nil, attachmentName: String? = nil) {
