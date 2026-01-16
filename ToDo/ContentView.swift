@@ -72,43 +72,9 @@ struct ContentView: View {
                     }
                 }
                 
-                if !items.filter({$0.isCompleted}).isEmpty{
-                    Section("Erledigt"){
-                        ForEach(items.filter{$0.isCompleted}) { item in
-                            NavigationLink(value: item) {
-                                HStack {
-                                    Text(item.title)
-                                        .strikethrough()               // Durchstreichen
-                                        .foregroundStyle(.secondary)   // Ausgrauen
-                                }
-                            }.swipeActions(edge: .leading){
-                                
-                                Button(role: .destructive, action: {
-                                    modelContext.delete(item)
-                                }) {
-                                    Image(systemName: "trash")
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-                                        .frame(width: 40, height: 40) // Feste Größe erzwingen
-                                        .background(.green)
-                                        .clipShape(Circle())
-                                }
-                                
-                                Button(role: .confirm, action: {
-                                    item.isCompleted = false
-                                }) {
-                                    Image(systemName: "arrow.uturn.backward")
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-                                        .frame(width: 40, height: 40) // Feste Größe erzwingen
-                                        .background(.green)
-                                        .clipShape(Circle())
-                                }.tint(.blue)
-                            }
-                            
-                        }
-                    }
-                }
+                //Erledigt Section
+                FinishedToDoElement(items: items)
+                
             }.navigationTitle("ToDo's")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
