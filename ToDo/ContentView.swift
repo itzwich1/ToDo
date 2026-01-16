@@ -14,6 +14,8 @@ struct ContentView: View {
     
     @State private var selectedItem: ToDoModel?
     
+    @State private var selectedCategory: Category? = nil
+    
     
     @State private var showAddSheet: Bool = false
     
@@ -22,57 +24,10 @@ struct ContentView: View {
         NavigationSplitView {
             List(selection: $selectedItem) {
                 
-                Section("Offene Aufgaben") {
-                    ForEach(items.filter{!$0.isCompleted}){ item in
-                        NavigationLink(value: item){
-                            HStack {
-                                Text(item.title)
-                                
-                                Spacer()
-                                
-                                // Dein Wichtigkeits-Icon
-                                if item.priority == .high {
-                                    Image(systemName: "exclamationmark.circle.fill")
-                                        .foregroundStyle(.red)
-                                }
-                                
-                                // Info, falls Termin heute ist (Optional, sieht aber gut aus)
-                                if item.hasDueDate {
-                                    Text("Fällig bis \(item.dueDate.formatted(date: .numeric, time: .omitted))")
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                        }.swipeActions(edge: .leading){
-                            
-                            Button(role: .destructive, action: {
-                                modelContext.delete(item)
-                            }) {
-                                Image(systemName: "trash")
-                                    .font(.headline)
-                                    .foregroundStyle(.white)
-                                    .frame(width: 40, height: 40) // Feste Größe erzwingen
-                                    .background(.green)
-                                    .clipShape(Circle())
-                            }
-                            
-                            if !item.isCompleted {
-                                Button(role: .confirm, action: {
-                                    item.isCompleted = true
-                                }) {
-                                    Image(systemName: "checkmark")
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-                                        .frame(width: 40, height: 40) // Feste Größe erzwingen
-                                        .background(.green)
-                                        .clipShape(Circle())
-                                }.tint(.green)
-                            }
-                        }
-                    }
-                }
+                //Offene ToDo's Section
+                OpenToDoElement(items: items)
                 
-                //Erledigt Section
+                //Erledigte ToDo's Section
                 FinishedToDoElement(items: items)
                 
             }.navigationTitle("ToDo's")
@@ -86,19 +41,9 @@ struct ContentView: View {
                         }
                     }
                     
-                    ToolbarItem(placement: .navigationBarLeading) { // .topBarLeading bei neuerem iOS
-                        Menu {
-                            /*Picker("Filter") {
-                                ForEach(FilterOption.allCases) { filter in
-                                    // Zeigt Haken beim ausgewählten Element an
-                                    Label(filter.rawValue, systemImage: iconForFilter(filter))
-                                        .tag(filter)
-                                }
-                            }*/
-                        } label: {
-                            // Das Icon in der Toolbar (Ein Filter-Trichter im Kreis)
-                            Image(systemName: "line.3.horizontal.decrease")
-                        }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        
+                        FilterElement(selectedCategory: $selectedCategory)
                     }
                     
                 }.sheet(isPresented: $showAddSheet){
