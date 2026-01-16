@@ -17,6 +17,9 @@ struct OpenToDoElement: View {
     var body: some View {
         
         Section("Offene Aufgaben") {
+            
+            
+            
             ForEach(items.filter{!$0.isCompleted}){ item in
                 NavigationLink(value: item){
                     HStack {

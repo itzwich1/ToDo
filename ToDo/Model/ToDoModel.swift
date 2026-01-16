@@ -79,13 +79,13 @@ final class ToDoModel {
     var dueDate: Date
     var hasDueDate: Bool
     var hasAnyTime: Bool
-    //var category: String //ggf. auch als Enum (3-5 Kategorien vorgeben)
+    var category: Category?
     
     @Attribute(.externalStorage) var attachment: Data?
     var attachmentName: String?
     
     
-    init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false, attachment: Data? = nil, attachmentName: String? = nil) {
+    init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false, attachment: Data? = nil, attachmentName: String? = nil, category: Category? = nil) {
         self.timestamp = timestamp
         self.title = title
         self.isCompleted = isCompleted
@@ -96,5 +96,6 @@ final class ToDoModel {
         self.hasAnyTime = hasAnyTime
         self.attachment = attachment
         self.attachmentName = attachmentName
+        self.category = category
     }
 }

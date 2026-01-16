@@ -24,6 +24,19 @@ struct AddToDoView: View {
                 Section("Neue Aufgabe") {
                     TextField("Titel", text: $newToDo.title)
                     Toggle("Erledigt", isOn: $newToDo.isCompleted)
+                    
+                    Picker("Wähle eine Kategorie", selection: $newToDo.category) {
+                        // Option "Keine" (falls dein category optional ist)
+                        Text("Keine").tag(nil as Category?)
+                        
+                        // Deine Kategorien aus dem Enum
+                        ForEach(Category.allCases) { category in
+                            Text(category.title).tag(category as Category?)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    
+                    
                 }
                 
                 DateAndTimeElement(toDo: newToDo,sectionHeadline: "Datum & Uhrzeit")
@@ -49,11 +62,7 @@ struct AddToDoView: View {
                     }
                 }
                 
-                
-                ///
                 AttachmentElement(todo: newToDo)
-                
-                ///
                 
             }
             .navigationTitle("Neues ToDo")
@@ -78,22 +87,8 @@ struct AddToDoView: View {
     }
     
     private func saveItem() {
-        // 1. Objekt aus den lokalen Variablen bauen
-        /*let newItem = ToDoModel(
-         timestamp: Date(),
-         title: title,
-         isCompleted: isCompleted,
-         notes: notes,
-         priority: priority,
-         dueDate: dueDate,
-         hasDueDate: hasDueDate
-         )*/
-        
         print(newToDo.priority.title)
-        // 2. In die Datenbank werfen
         modelContext.insert(newToDo)
-        
-        // 3. Fenster zu
         dismiss()
     }
 }
