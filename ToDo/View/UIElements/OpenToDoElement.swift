@@ -14,13 +14,22 @@ struct OpenToDoElement: View {
     
     var items: [ToDoModel]
     
+    var selectedCategory: Category?
+    
     var body: some View {
         
         Section("Offene Aufgaben") {
             
+            let filteredItems = items.filter{ item in
+                
+                let isNotCompleted = !item.isCompleted
+                
+                let matchesCategory = (selectedCategory == nil || item.category == selectedCategory)
+                
+                return isNotCompleted && matchesCategory
+            }
             
-            
-            ForEach(items.filter{!$0.isCompleted}){ item in
+            ForEach(filteredItems){ item in
                 NavigationLink(value: item){
                     HStack {
                         Text(item.title)

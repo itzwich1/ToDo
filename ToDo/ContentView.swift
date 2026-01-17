@@ -25,7 +25,7 @@ struct ContentView: View {
             List(selection: $selectedItem) {
                 
                 //Offene ToDo's Section
-                OpenToDoElement(items: items)
+                OpenToDoElement(items: items, selectedCategory: selectedCategory)
                 
                 //Erledigte ToDo's Section
                 FinishedToDoElement(items: items)
