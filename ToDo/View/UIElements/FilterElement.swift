@@ -10,13 +10,13 @@ import SwiftUI
 
 struct FilterElement: View {
     
-    @Binding var selectedCategory: Category?
+    @Binding var filteredCategory: Category?
     
     var body: some View {
         
         // .topBarLeading bei neuerem iOS
         Menu {
-            Picker("Kategorie", selection: $selectedCategory){
+            Picker("Kategorie", selection: $filteredCategory){
                 Text("Alle anzeigen").tag(nil as Category?)
                 
                 ForEach(Category.allCases) { category in
@@ -25,9 +25,10 @@ struct FilterElement: View {
                 }
                 
             }
+            
         } label: {
             // Das Icon in der Toolbar (Ein Filter-Trichter im Kreis)
-            Image(systemName: selectedCategory == nil ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+            Image(systemName: filteredCategory == nil ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
         }
         
         

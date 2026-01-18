@@ -14,7 +14,7 @@ struct OpenToDoElement: View {
     
     var items: [ToDoModel]
     
-    var selectedCategory: Category?
+    var filteredCategory: Category?
     
     var body: some View {
         
@@ -24,7 +24,7 @@ struct OpenToDoElement: View {
                 
                 let isNotCompleted = !item.isCompleted
                 
-                let matchesCategory = (selectedCategory == nil || item.category == selectedCategory)
+                let matchesCategory = (filteredCategory == nil || item.category == filteredCategory)
                 
                 return isNotCompleted && matchesCategory
             }
@@ -52,24 +52,32 @@ struct OpenToDoElement: View {
                 }.swipeActions(edge: .leading){
                     
                     Button(role: .destructive, action: {
+                        
+                        //Benachrichtigung fuer ToDo entfernen
+                        NotificationManager.instance.cancelNotification(for: item)
+                        
                         modelContext.delete(item)
                     }) {
                         Image(systemName: "trash")
                             .font(.headline)
                             .foregroundStyle(.white)
-                            .frame(width: 40, height: 40) // Feste Größe erzwingen
+                            .frame(width: 40, height: 40)
                             .background(.green)
                             .clipShape(Circle())
                     }
                     
                     if !item.isCompleted {
                         Button(role: .confirm, action: {
+                            
                             item.isCompleted = true
+                            
+                            //Benachrichtigung fuer ToDo entfernen
+                            NotificationManager.instance.cancelNotification(for: item)
                         }) {
                             Image(systemName: "checkmark")
                                 .font(.headline)
                                 .foregroundStyle(.white)
-                                .frame(width: 40, height: 40) // Feste Größe erzwingen
+                                .frame(width: 40, height: 40)
                                 .background(.green)
                                 .clipShape(Circle())
                         }.tint(.green)

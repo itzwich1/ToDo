@@ -33,7 +33,6 @@ struct EditToDoView: View {
                     }
                 }
                 .pickerStyle(.menu)
-                
             }
             
             DateAndTimeElement(toDo: toDo, sectionHeadline: "Datum & Uhrzeit")
@@ -72,22 +71,31 @@ struct EditToDoView: View {
             }
         }
         .navigationTitle("Bearbeiten")
+        .onChange(of: toDo.dueDate) { updateNotification() }
+        .onChange(of: toDo.hasDueDate) { updateNotification() }
+        .onChange(of: toDo.hasAnyTime) { updateNotification() }
+        .onChange(of: toDo.title) { updateNotification() }
+        .onChange(of: toDo.isCompleted) {
+            // Wenn erledigt, brechen wir sofort ab, sonst Update
+            if toDo.isCompleted {
+                NotificationManager.instance.cancelNotification(for: toDo)
+            } else {
+                updateNotification()
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             
-            
             ToolbarItem(placement: .confirmationAction) {
-                // Button heißt "Fertig", weil gespeichert wird automatisch
                 Button("Fertig") {
-                    // Da @Bindable die Daten schon live geschrieben hat,
-                    // müssen wir hier nur das Fenster zumachen.
                     dismiss()
                 }
-                // HIER WAR DER FEHLER: Du musst toDo.title prüfen, nicht title
                 .disabled(toDo.title.isEmpty)
             }
         }
-        
-        
+    }
+    
+    private func updateNotification(){
+        NotificationManager.instance.scheduleNotification(for: toDo)
     }
 }

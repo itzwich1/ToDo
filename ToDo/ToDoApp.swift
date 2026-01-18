@@ -16,15 +16,23 @@ struct ToDoApp: App {
             ToDoModel.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
+    init() {
+        // Hier fragen wir direkt beim Start (oder du machst es erst beim ersten ToDo)
+        NotificationManager.instance.requestAuthorization()
+    }
+    
     var body: some Scene {
+        
+        
+        
         WindowGroup {
             ContentView()
         }

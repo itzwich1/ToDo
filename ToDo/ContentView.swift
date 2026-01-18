@@ -14,8 +14,7 @@ struct ContentView: View {
     
     @State private var selectedItem: ToDoModel?
     
-    @State private var selectedCategory: Category? = nil
-    
+    @State private var filteredCategory: Category? = nil
     
     @State private var showAddSheet: Bool = false
     
@@ -25,7 +24,7 @@ struct ContentView: View {
             List(selection: $selectedItem) {
                 
                 //Offene ToDo's Section
-                OpenToDoElement(items: items, selectedCategory: selectedCategory)
+                OpenToDoElement(items: items, filteredCategory: filteredCategory)
                 
                 //Erledigte ToDo's Section
                 FinishedToDoElement(items: items)
@@ -43,7 +42,7 @@ struct ContentView: View {
                     
                     ToolbarItem(placement: .navigationBarLeading) {
                         
-                        FilterElement(selectedCategory: $selectedCategory)
+                        FilterElement(filteredCategory: $filteredCategory)
                     }
                     
                 }.sheet(isPresented: $showAddSheet){

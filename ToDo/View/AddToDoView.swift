@@ -89,6 +89,9 @@ struct AddToDoView: View {
     private func saveItem() {
         print(newToDo.priority.title)
         modelContext.insert(newToDo)
+        
+        NotificationManager.instance.scheduleNotification(for: newToDo)
+        
         dismiss()
     }
 }

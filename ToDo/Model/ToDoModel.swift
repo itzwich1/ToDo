@@ -69,6 +69,9 @@ enum Priority: Int, Codable, CaseIterable, Identifiable, Comparable{
 
 @Model
 final class ToDoModel {
+    
+    @Attribute(.unique) var id: UUID = UUID()
+    
     var timestamp: Date
     var title: String
     var isCompleted: Bool
@@ -86,6 +89,9 @@ final class ToDoModel {
     
     
     init(timestamp: Date, title: String = "", isCompleted: Bool = false, notes: String = "", priority: Priority = .medium, dueDate: Date = Date(), hasDueDate: Bool = false, hasAnyTime: Bool = false, attachment: Data? = nil, attachmentName: String? = nil, category: Category? = nil) {
+        
+        self.id = UUID()
+        
         self.timestamp = timestamp
         self.title = title
         self.isCompleted = isCompleted
