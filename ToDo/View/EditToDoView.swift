@@ -50,7 +50,6 @@ struct EditToDoView: View {
                 }
             }
             
-            
             Section("Notizen"){
                 TextEditor(text: $toDo.notes).frame(minWidth: 120)
                 
@@ -76,7 +75,6 @@ struct EditToDoView: View {
         .onChange(of: toDo.hasAnyTime) { updateNotification() }
         .onChange(of: toDo.title) { updateNotification() }
         .onChange(of: toDo.isCompleted) {
-            // Wenn erledigt, brechen wir sofort ab, sonst Update
             if toDo.isCompleted {
                 NotificationManager.instance.cancelNotification(for: toDo)
             } else {

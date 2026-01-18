@@ -33,19 +33,18 @@ class NotificationManager {
         
         // Inhalt der Nachricht
         let content = UNMutableNotificationContent()
-        content.title = "ToDo: \(todo.title) heute fällig!"
-        content.sound = .default
+        
+        
         
         //Eindeutige ID des ToDo's
         let identifier = todo.id.uuidString
         
         var components: DateComponents
         
-        
         if todo.hasAnyTime {
             
             //Erinnerung zur entsprechenden Uhrzeit
-            if let reminderDate = Calendar.current.date(byAdding: .minute, value: -15, to: todo.dueDate) {
+            if let reminderDate = Calendar.current.date(byAdding: .minute, value: -60, to: todo.dueDate) {
                 // Und holen uns DANN die Komponenten von diesem neuen Datum
                 components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: reminderDate)
             } else {
@@ -53,14 +52,20 @@ class NotificationManager {
                 components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: todo.dueDate)
             }
             
+            content.title = "ToDo: \"\(todo.title)\" in 1h fällig!"
+            
         } else {
             
             //Erinnerung bei ganzaegigen Events
             components = Calendar.current.dateComponents([.year, .month, .day], from: todo.dueDate)
             
+            content.title = "ToDo: \(todo.title) heute fällig!"
+            
             components.hour = 6
             components.minute = 0
         }
+        
+        content.sound = .default
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         
