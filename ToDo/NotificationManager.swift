@@ -23,22 +23,16 @@ class NotificationManager {
             } else {
                 print("Erlaubnis erteilt: \(success)")
             }
-            
         }
     }
     
     func scheduleNotification(for todo: ToDoModel){
-        // Nur planen, wenn auch ein Datum gesetzt ist
         guard todo.hasDueDate else { return }
         
         // Inhalt der Nachricht
         let content = UNMutableNotificationContent()
         
-        
-        
-        //Eindeutige ID des ToDo's
         let identifier = todo.id.uuidString
-        
         var components: DateComponents
         
         if todo.hasAnyTime {
@@ -58,15 +52,11 @@ class NotificationManager {
             
             //Erinnerung bei ganzaegigen Events
             components = Calendar.current.dateComponents([.year, .month, .day], from: todo.dueDate)
-            
             content.title = "ToDo: \(todo.title) heute fällig!"
-            
             components.hour = 6
             components.minute = 0
         }
-        
         content.sound = .default
-        
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         
         // Anfrage erstellen
@@ -74,7 +64,6 @@ class NotificationManager {
         
         // Anfrage an das System übergeben
         UNUserNotificationCenter.current().add(request)
-        print("Benachrichtigung geplant für: \(todo.title) um \(todo.dueDate)")
     }
     
     

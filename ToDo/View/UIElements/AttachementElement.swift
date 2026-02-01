@@ -7,19 +7,16 @@
 
 import SwiftUI
 import SwiftData
-import UniformTypeIdentifiers // WICHTIG für .item
+import UniformTypeIdentifiers
 
 struct AttachmentElement: View {
-    // Wir empfangen das Model.
-    // @Bindable ist hier super, falls wir später z.B. den Dateinamen editierbar machen wollen.
+    
     @Bindable var todo: ToDoModel
     
-    // Der State für das Popup gehört jetzt nur noch zu dieser kleinen View
     @State private var showFileImporter: Bool = false
     
     var body: some View {
         Section("Anhang") {
-            // 1. Anzeige wenn Datei vorhanden
             if let name = todo.attachmentName {
                 HStack {
                     Image(systemName: "doc.fill")
@@ -41,13 +38,11 @@ struct AttachmentElement: View {
                     }
                 }
             } else {
-                // 2. Button zum Hinzufügen
                 Button(action: { showFileImporter = true }) {
                     Label("Datei hinzufügen", systemImage: "paperclip")
                 }
             }
         }
-        // 3. Der komplexe File-Importer Code ist jetzt hier versteckt
         .fileImporter(
             isPresented: $showFileImporter,
             allowedContentTypes: [UTType.item],

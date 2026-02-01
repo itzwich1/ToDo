@@ -9,8 +9,6 @@ import Foundation
 import SwiftData
 import SwiftUI
 
-
-
 enum Category: Int, Codable, CaseIterable, Identifiable{
     
     case privat = 1
@@ -20,7 +18,6 @@ enum Category: Int, Codable, CaseIterable, Identifiable{
     
     var id: Int { rawValue }
     
-    
     var title: String {
         switch self {
         case .privat: return "Privat"
@@ -29,7 +26,6 @@ enum Category: Int, Codable, CaseIterable, Identifiable{
         case .arbeit: return "Arbeit"
         }
     }
-    
 }
 
 enum Priority: Int, Codable, CaseIterable, Identifiable, Comparable{
@@ -38,11 +34,9 @@ enum Priority: Int, Codable, CaseIterable, Identifiable, Comparable{
     case medium = 2
     case high = 3
     
-    
-    // Für Identifiable (Pflicht)
     var id: Int { rawValue }
     
-    // WICHTIG: Die Text-Darstellung für den Nutzer
+    // Text-Darstellung fuer den Nutzer
     var title: String {
         switch self {
         case .high: return "Hoch"
@@ -51,20 +45,17 @@ enum Priority: Int, Codable, CaseIterable, Identifiable, Comparable{
         }
     }
     
-    // WICHTIG: Die Farbe für die UI (z.B. der kleine Punkt in der Liste)
     var color: Color {
         switch self {
         case .low: return .green
         case .medium: return .orange
         case .high: return .red
-            
         }
     }
     
     static func < (lhs: Priority, rhs: Priority) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
-    
 }
 
 @Model
@@ -78,7 +69,6 @@ final class ToDoModel {
     var notes: String
     var priority: Priority
     
-    //Optional noch nicht sicher
     var dueDate: Date
     var hasDueDate: Bool
     var hasAnyTime: Bool

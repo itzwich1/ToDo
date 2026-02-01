@@ -39,9 +39,7 @@ struct ContentView: View {
                             Label("Add Item", systemImage: "plus")
                         }
                     }
-                    
                     ToolbarItem(placement: .navigationBarLeading) {
-                        
                         FilterElement(filteredCategory: $filteredCategory)
                     }
                     
